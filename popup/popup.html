@@ -1,0 +1,329 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=380">
+  <title>Reel Counter</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="popup.css">
+</head>
+<body>
+  <div class="popup-container">
+    <!-- Header -->
+    <header class="popup-header">
+      <div class="header-brand">
+        <span class="header-icon">🧠</span>
+        <h1 class="header-title">Reel Counter</h1>
+      </div>
+      <div class="header-badge" id="brain-badge" data-state="healthy">
+        <span id="brain-badge-emoji">🧠</span>
+        <span id="brain-badge-label">Healthy</span>
+      </div>
+    </header>
+
+    <!-- Tab Navigation -->
+    <nav class="tab-nav">
+      <button class="tab-btn active" data-tab="dashboard">
+        <span class="tab-icon">📊</span>
+        <span class="tab-label">Stats</span>
+      </button>
+      <button class="tab-btn" data-tab="friends">
+        <span class="tab-icon">👥</span>
+        <span class="tab-label">Friends</span>
+        <span class="tab-badge" id="friends-badge" style="display:none">!</span>
+      </button>
+      <button class="tab-btn" data-tab="challenges">
+        <span class="tab-icon">⚔️</span>
+        <span class="tab-label">Battles</span>
+        <span class="tab-badge" id="challenge-badge" style="display:none">!</span>
+      </button>
+      <button class="tab-btn" data-tab="settings">
+        <span class="tab-icon">⚙️</span>
+        <span class="tab-label">Settings</span>
+      </button>
+    </nav>
+
+    <!-- ═══════════════════════════════════════════════════════════════ -->
+    <!-- TAB: Dashboard -->
+    <!-- ═══════════════════════════════════════════════════════════════ -->
+    <div class="tab-content active" id="tab-dashboard">
+      <!-- Today's Stats -->
+      <section class="stats-card">
+        <div class="stats-main">
+          <div class="stats-count-wrapper">
+            <span class="stats-count" id="today-count">0</span>
+            <span class="stats-label">reels today</span>
+            <div class="rank-badge" id="rank-badge">
+              <span id="rank-emoji">🧘</span>
+              <span id="rank-title">Digital Monk</span>
+            </div>
+          </div>
+          <div class="stats-brain">
+            <div class="brain-visual">
+              <div class="brain-glow" id="brain-glow"></div>
+              <span class="brain-emoji-large" id="brain-emoji-large">🧠</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Limit Progress -->
+        <div class="limit-section">
+          <div class="limit-header">
+            <span class="limit-title">Daily Limit</span>
+            <span class="limit-count"><span id="limit-current">0</span> / <span id="limit-max">50</span></span>
+          </div>
+          <div class="limit-track">
+            <div class="limit-fill" id="limit-fill"></div>
+          </div>
+        </div>
+
+        <!-- Platform Grid -->
+        <div class="platform-grid">
+          <div class="platform-card platform-youtube">
+            <span class="platform-icon">▶️</span>
+            <span class="platform-count" id="yt-count">0</span>
+            <span class="platform-name">YT Shorts</span>
+          </div>
+          <div class="platform-card platform-instagram">
+            <span class="platform-icon">📸</span>
+            <span class="platform-count" id="ig-count">0</span>
+            <span class="platform-name">IG Reels</span>
+          </div>
+        </div>
+      </section>
+
+      <!-- Weekly Chart -->
+      <section class="chart-section">
+        <div class="section-header">
+          <h2 class="section-title">This Week</h2>
+          <span class="section-subtitle" id="weekly-total">0 total</span>
+        </div>
+        <canvas id="weekly-chart" width="340" height="120"></canvas>
+      </section>
+    </div>
+
+    <!-- ═══════════════════════════════════════════════════════════════ -->
+    <!-- TAB: Friends -->
+    <!-- ═══════════════════════════════════════════════════════════════ -->
+    <div class="tab-content" id="tab-friends">
+      <!-- Your Profile Card -->
+      <section class="profile-card">
+        <div class="profile-header">
+          <div class="profile-avatar" id="my-avatar">🧠</div>
+          <div class="profile-info">
+            <input class="profile-name-input" id="my-name" placeholder="Your Name" maxlength="20" />
+            <div class="profile-rank" id="my-rank">Digital Monk 🧘</div>
+          </div>
+          <div class="profile-count" id="my-count">0</div>
+        </div>
+        <div class="friend-code-section">
+          <span class="friend-code-label">Your Friend Code</span>
+          <div class="friend-code-box">
+            <code class="friend-code" id="my-friend-code">REEL-XXXX-XXXX</code>
+            <button class="copy-btn" id="copy-code-btn" title="Copy">📋</button>
+          </div>
+        </div>
+      </section>
+
+      <!-- Add Friend -->
+      <section class="add-friend-section">
+        <div class="add-friend-row">
+          <input class="add-friend-input" id="add-friend-input" placeholder="Enter friend code..." maxlength="14" />
+          <button class="add-friend-btn" id="add-friend-btn">Add 👋</button>
+        </div>
+      </section>
+
+      <!-- Friends Leaderboard -->
+      <section class="friends-list-section">
+        <div class="section-header">
+          <h2 class="section-title">🏆 Today's Leaderboard</h2>
+          <span class="section-subtitle" id="friends-count-label">0 friends</span>
+        </div>
+        <div class="friends-list" id="friends-list">
+          <!-- Populated by JS -->
+          <div class="empty-state" id="friends-empty">
+            <span class="empty-icon">👻</span>
+            <span class="empty-text">No friends yet. Share your code!</span>
+            <span class="empty-sub">Or add demo friends below 👇</span>
+          </div>
+        </div>
+        <button class="demo-btn" id="add-demo-friends-btn">🤖 Add Demo Friends</button>
+      </section>
+
+      <!-- Roast Zone -->
+      <div class="roast-banner" id="roast-banner" style="display:none">
+        <span class="roast-emoji">🔥</span>
+        <span class="roast-text" id="roast-text"></span>
+      </div>
+    </div>
+
+    <!-- ═══════════════════════════════════════════════════════════════ -->
+    <!-- TAB: Challenges / Battles -->
+    <!-- ═══════════════════════════════════════════════════════════════ -->
+    <div class="tab-content" id="tab-challenges">
+      <!-- Active Challenges -->
+      <section class="challenges-section">
+        <div class="section-header">
+          <h2 class="section-title">⚔️ Active Battles</h2>
+        </div>
+        <div class="challenges-list" id="active-challenges">
+          <div class="empty-state" id="challenges-empty">
+            <span class="empty-icon">🏟️</span>
+            <span class="empty-text">No active battles</span>
+            <span class="empty-sub">Start one below!</span>
+          </div>
+        </div>
+      </section>
+
+      <!-- Create Challenge -->
+      <section class="create-challenge-section">
+        <div class="section-header">
+          <h2 class="section-title">🎮 Start a Battle</h2>
+        </div>
+
+        <div class="challenge-types">
+          <button class="challenge-type-card" data-type="detox-duel">
+            <span class="ct-emoji">🧘</span>
+            <span class="ct-name">Detox Duel</span>
+            <span class="ct-desc">Scroll fewer reels than your friend today</span>
+          </button>
+
+          <button class="challenge-type-card" data-type="scroll-showdown">
+            <span class="ct-emoji">🤠</span>
+            <span class="ct-name">Scroll Showdown</span>
+            <span class="ct-desc">Lowest scroll count in 3 days wins</span>
+          </button>
+
+          <button class="challenge-type-card" data-type="cold-turkey">
+            <span class="ct-emoji">🦃</span>
+            <span class="ct-name">Cold Turkey</span>
+            <span class="ct-desc">First person to scroll a reel LOSES</span>
+          </button>
+
+          <button class="challenge-type-card" data-type="reel-roulette">
+            <span class="ct-emoji">🎰</span>
+            <span class="ct-name">Reel Roulette</span>
+            <span class="ct-desc">Random limit (10-30). Stay under it!</span>
+          </button>
+
+          <button class="challenge-type-card" data-type="brain-saver">
+            <span class="ct-emoji">🧠</span>
+            <span class="ct-name">Brain Saver</span>
+            <span class="ct-desc">Both stay under 15 reels for a week</span>
+          </button>
+
+          <button class="challenge-type-card" data-type="shame-game">
+            <span class="ct-emoji">😈</span>
+            <span class="ct-name">Shame Game</span>
+            <span class="ct-desc">Loser changes their name to "Reel Addict" for a day</span>
+          </button>
+        </div>
+      </section>
+
+      <!-- Challenge creation modal (hidden by default) -->
+      <div class="modal-overlay" id="challenge-modal" style="display:none">
+        <div class="modal-card">
+          <div class="modal-header">
+            <span class="modal-emoji" id="modal-challenge-emoji">🧘</span>
+            <h3 class="modal-title" id="modal-challenge-title">Detox Duel</h3>
+            <button class="modal-close" id="modal-close">✕</button>
+          </div>
+          <p class="modal-desc" id="modal-challenge-desc">Scroll fewer reels than your friend today</p>
+          
+          <div class="modal-field">
+            <label>Challenge a Friend</label>
+            <select class="modal-select" id="challenge-friend-select">
+              <option value="">Select a friend...</option>
+            </select>
+          </div>
+
+          <div class="modal-field" id="modal-limit-field" style="display:none">
+            <label>Reel Limit</label>
+            <input type="number" class="modal-input" id="challenge-limit" value="15" min="1" max="500" />
+          </div>
+
+          <div class="modal-field" id="modal-duration-field">
+            <label>Duration</label>
+            <select class="modal-select" id="challenge-duration">
+              <option value="1">1 Day</option>
+              <option value="3">3 Days</option>
+              <option value="7" selected>1 Week</option>
+            </select>
+          </div>
+
+          <button class="modal-submit" id="start-challenge-btn">⚔️ Start Battle!</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- ═══════════════════════════════════════════════════════════════ -->
+    <!-- TAB: Settings -->
+    <!-- ═══════════════════════════════════════════════════════════════ -->
+    <div class="tab-content" id="tab-settings">
+      <section class="settings-section">
+        <div class="setting-item">
+          <div class="setting-info">
+            <span class="setting-label">Daily Limit</span>
+            <span class="setting-desc">Get notified when you hit this</span>
+          </div>
+          <div class="setting-control">
+            <button class="limit-btn" id="limit-minus">−</button>
+            <span class="limit-value" id="limit-value">50</span>
+            <button class="limit-btn" id="limit-plus">+</button>
+          </div>
+        </div>
+
+        <div class="setting-item">
+          <div class="setting-info">
+            <span class="setting-label">Show Overlay</span>
+            <span class="setting-desc">Floating counter on pages</span>
+          </div>
+          <label class="toggle">
+            <input type="checkbox" id="overlay-toggle" checked>
+            <span class="toggle-slider"></span>
+          </label>
+        </div>
+
+        <div class="setting-item">
+          <div class="setting-info">
+            <span class="setting-label">Track YouTube</span>
+            <span class="setting-desc">Count YouTube Shorts</span>
+          </div>
+          <label class="toggle">
+            <input type="checkbox" id="youtube-toggle" checked>
+            <span class="toggle-slider"></span>
+          </label>
+        </div>
+
+        <div class="setting-item">
+          <div class="setting-info">
+            <span class="setting-label">Track Instagram</span>
+            <span class="setting-desc">Count Instagram Reels</span>
+          </div>
+          <label class="toggle">
+            <input type="checkbox" id="instagram-toggle" checked>
+            <span class="toggle-slider"></span>
+          </label>
+        </div>
+      </section>
+
+      <!-- Reset -->
+      <div class="reset-section">
+        <button class="reset-btn" id="reset-btn">
+          <span>🔄</span> Reset Today's Count
+        </button>
+      </div>
+
+      <footer class="popup-footer">
+        <span class="footer-text">Reel Counter v1.0</span>
+        <span class="footer-dot">·</span>
+        <span class="footer-text">Stay mindful 🌱</span>
+      </footer>
+    </div>
+  </div>
+
+  <script type="module" src="popup.js"></script>
+</body>
+</html>

@@ -1,0 +1,58 @@
+{
+  "manifest_version": 3,
+  "name": "Reel Counter",
+  "version": "1.0.0",
+  "description": "Track how many Instagram Reels and YouTube Shorts you scroll. Visualize your brain health and set daily limits.",
+  "permissions": [
+    "storage",
+    "alarms",
+    "activeTab"
+  ],
+  "background": {
+    "service_worker": "background.js",
+    "type": "module"
+  },
+  "content_scripts": [
+    {
+      "matches": [
+        "*://*.youtube.com/*",
+        "*://*.instagram.com/*"
+      ],
+      "js": [
+        "content/detector.js",
+        "content/overlay.js"
+      ],
+      "css": [
+        "content/overlay.css"
+      ],
+      "run_at": "document_idle",
+      "all_frames": false
+    }
+  ],
+  "action": {
+    "default_popup": "popup/popup.html",
+    "default_icon": {
+      "16": "assets/icon-16.png",
+      "48": "assets/icon-48.png",
+      "128": "assets/icon-128.png"
+    },
+    "default_title": "Reel Counter"
+  },
+  "icons": {
+    "16": "assets/icon-16.png",
+    "48": "assets/icon-48.png",
+    "128": "assets/icon-128.png"
+  },
+  "web_accessible_resources": [
+    {
+      "resources": [
+        "assets/*",
+        "content/overlay.css"
+      ],
+      "matches": [
+        "*://*.youtube.com/*",
+        "*://*.instagram.com/*"
+      ]
+    }
+  ]
+}
